@@ -52,6 +52,25 @@ plot(st_geometry(maparenda))
 
 #------------------------------------------------------------------------------------------------#
 
+#----CRIANDO O DF DE LOCALIZAçÕES E TRANSFORMANDO EM SF----#
+
+#------------------------------------------------------------------------------------------------#
+
+#Cria o DF de pontos
+pontos <- data_frame(place = c("Av. Paulista", "Vila Olímpia", "Itaquera"), 
+                     lat = c(-23.5686879, -23.5940278, -23.5360799), lon = c(-46.647775, -46.6842193, -46.4555099))
+
+#Pegar o CRS do mapa
+st_crs(maparenda)
+
+#Transforma o DF de pontos em um formato para mapas adicionando o mesmo CRS do mapa 
+localidades <- st_as_sf(pontos, coords = c("lon", "lat"), crs = "+proj=longlat +ellps=GRS80 +no_defs")
+
+#Plota os pontos para testar
+plot(st_geometry(localidades))
+
+#------------------------------------------------------------------------------------------------#
+
 #----CASO SEJA NECESSÁRIO DIMINUIR O TAMANHO DO ARQUIVO----#
 
 #------------------------------------------------------------------------------------------------#
@@ -94,7 +113,7 @@ titulo = "Renda - SP"
 breaks = c(1000, 3000, 5000, 10000, 20000, 75000) 
 
 #Primeira layer = Mapa de SP
-tm_shape(maparenda_simples) +
+tm_shape(maparenda) +
   
   #Utiliza as cores para montar o mapa de calor baseado na coluna V005
   tm_fill(col = "V005", title = titulo, palette = "BuGn", breaks = breaks) +
@@ -103,4 +122,10 @@ tm_shape(maparenda_simples) +
   tm_borders() +
   
   #Adiciona o estilo cobalt
-  tm_style("cobalt") 
+  tm_style("cobalt") +
+  
+  #Insere a segunda layer = Localidades (lat,lon)
+  tm_shape(localidades) + 
+  
+  #Desenha os pontos
+  tm_dots(size = 0.05)
