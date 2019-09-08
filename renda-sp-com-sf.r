@@ -50,6 +50,9 @@ maparenda <- inner_join(mapa, renda, by= c("CD_GEOCODI" = "Cod_setor"))
 #Plota apenas os polígonos do mapa
 plot(st_geometry(maparenda))
 
+#Salva o objeto maparenda em Shapefile
+st_write(maparenda, "~/R-Projetos/MapaSP/maparendasp.shp")
+
 #------------------------------------------------------------------------------------------------#
 
 #----CRIANDO O DF DE LOCALIZAçÕES E TRANSFORMANDO EM SF----#
@@ -57,7 +60,7 @@ plot(st_geometry(maparenda))
 #------------------------------------------------------------------------------------------------#
 
 #Cria o DF de pontos
-pontos <- data_frame(place = c("Av. Paulista", "Vila Olímpia", "Itaquera"), 
+pontos <- data.frame(local = c("Av. Paulista", "Vila Olímpia", "Itaquera"), 
                      lat = c(-23.5686879, -23.5940278, -23.5360799), lon = c(-46.647775, -46.6842193, -46.4555099))
 
 #Pegar o CRS do mapa
